@@ -1,0 +1,15 @@
+/* src/components/layouts/MainLayout.css */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Forces container to span full browser height */
+}
+
+.layout-content {
+  flex: 1; /* Automatically expands to push the footer to the bottom */
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
