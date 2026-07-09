@@ -4,7 +4,6 @@ interface UsBasketMapProps {
     mapTimestamp: number;
     isMapLoading: boolean;
     setIsMapLoading: (loading: boolean) => void;
-
 }
 
 interface SheetItem {

@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@mirawision/usa-map-react": "^2.0.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-us-map": "^0.0.2-0"

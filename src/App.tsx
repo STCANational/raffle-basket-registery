@@ -20,14 +20,10 @@ function App() {
   return (
     <>
       <MainLayout>
-        <button onClick={() => handleMapRefresh()}>
-          Refresh Chart
-        </button>
         <USBasketMap
           isMapLoading={isLoading}
           setIsMapLoading={setIsLoading}
           mapTimestamp={timestamp}
-          listRefreshTrigger={timestamp}
         />
       </MainLayout>
     </>
