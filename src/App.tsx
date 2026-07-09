@@ -7,23 +7,27 @@ import { useState } from 'react';
 function App() {
   const [timestamp, setTimestamp] = useState(Date.now());
   const [isLoading, setIsLoading] = useState(true);
+  const [listRefreshTrigger, setListRefreshTrigger] = useState(0);
 
-
-  const handleRefresh = () => {
+  const handleMapRefresh = () => {
     setIsLoading(true);
     setTimestamp(Date.now());
+  }
+  const handleListRefresh = () => {
+    setListRefreshTrigger(prev => prev + 1);
   }
 
   return (
     <>
       <MainLayout>
-        <button onClick={() => handleRefresh()}>
+        <button onClick={() => handleMapRefresh()}>
           Refresh Chart
         </button>
         <USBasketMap
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          timestamp={timestamp}
+          isMapLoading={isLoading}
+          setIsMapLoading={setIsLoading}
+          mapTimestamp={timestamp}
+          listRefreshTrigger={timestamp}
         />
       </MainLayout>
     </>
