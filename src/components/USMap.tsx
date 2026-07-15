@@ -1,6 +1,6 @@
 import React from 'react'
-import { USAMap, StateNames, type USAStateAbbreviation }  from '@mirawision/usa-map-react';
-import {getAbbreviationByStateName} from '../utils/stateHelpers';
+import { USAMap, StateNames, type USAStateAbbreviation } from '@mirawision/usa-map-react';
+import { getAbbreviationByStateName } from '../utils/stateHelpers';
 
 const defaultStateColor: string = '18D61B';
 const claimedStateColor: string = 'FF0000';
@@ -25,17 +25,16 @@ interface StateProps {
 
 
 export class ClaimedState {
-    
-    static GetCustomStates(states: ClaimedState[]): {[key:string]: StateProps} 
-    {
+
+    static GetCustomStates(states: ClaimedState[]): { [key: string]: StateProps } {
         return states.reduce((acc, state) => {
             const stateAbb = getAbbreviationByStateName(state.stateName);
 
             if (stateAbb) {
-                acc[stateAbb] = {fill: claimedStateColor};  
+                acc[stateAbb] = { fill: claimedStateColor };
             }
             return acc
-        }, {} as {[key: string]: StateProps})
+        }, {} as { [key: string]: StateProps })
     }
 
     constructor(stateAbbriviation: USAStateAbbreviation, user: string) {
@@ -47,7 +46,7 @@ export class ClaimedState {
     user: string;
 
     get stateName(): string {
-        return  StateNames[this.stateAbbriviation];
+        return StateNames[this.stateAbbriviation];
     }
 }
 
@@ -56,14 +55,13 @@ interface USMapProps {
 }
 
 
-const USMap: React.FC<USMapProps> = ({claimedStates}) => {
-    const customStates = ClaimedState.GetCustomStates(claimedStates);
+const USMap: React.FC<USMapProps> = ({ claimedStates }) => {
 
 
     return (
         <div>
             <USAMap
-                customStates={customStates}
+                customStates={ClaimedState.GetCustomStates(claimedStates)}
             />
         </div>
     );
