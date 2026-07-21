@@ -42,13 +42,13 @@ export const StateGridList: React.FC<StateGridListProps> = ({
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                backgroundColor: isClaimed ? '#f9f9f9' : '#fff',
+                backgroundColor: 'var(--social-bg)',
                 minHeight: '80px'
               }}
             >
               <div>
                 <strong style={{ fontSize: '14px' }}>{state.name}</strong>
-                <span style={{ color: '#777', fontSize: '12px', marginLeft: '6px' }}>
+                <span style={{ color: 'var(--text)', fontSize: '12px', marginLeft: '6px' }}>
                   ({state.code})
                 </span>
               </div>
