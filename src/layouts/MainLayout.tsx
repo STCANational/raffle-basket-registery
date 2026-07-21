@@ -17,7 +17,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {children}
       </main>
       
-      <AppFooter />
     </div>
   );
 };

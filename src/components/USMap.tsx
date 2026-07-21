@@ -1,9 +1,9 @@
 import React from 'react'
 import { USAMap, StateNames, type USAStateAbbreviation } from '@mirawision/usa-map-react';
-import { getAbbreviationByStateName } from '../utils/stateHelpers';
+import { getAbbFromName, getNameFromAbb } from '../utils/stateHelpers';
+import type { ClaimedStates } from '../utils/states';
 
-const defaultStateColor: string = '18D61B';
-const claimedStateColor: string = 'FF0000';
+const claimedStateColor: string = 'red';
 
 
 interface StateTextRenderProps {
@@ -21,49 +21,54 @@ interface StateProps {
 }
 
 
+type CustomeStateType ={ [key: string]: StateProps } 
 
-
-
-export class ClaimedState {
-
-    static GetCustomStates(states: ClaimedState[]): { [key: string]: StateProps } {
-        return states.reduce((acc, state) => {
-            const stateAbb = getAbbreviationByStateName(state.stateName);
-
-            if (stateAbb) {
-                acc[stateAbb] = { fill: claimedStateColor };
-            }
-            return acc
-        }, {} as { [key: string]: StateProps })
-    }
-
-    constructor(stateAbbriviation: USAStateAbbreviation, user: string) {
-        this.stateAbbriviation = stateAbbriviation;
-        this.user = user;
-    }
-
-    stateAbbriviation: USAStateAbbreviation
-    user: string;
-
-    get stateName(): string {
-        return StateNames[this.stateAbbriviation];
-    }
-}
 
 interface USMapProps {
-    claimedStates: ClaimedState[]
+    claimedStates: ClaimedStates,
+    isLoading: boolean,
+    unclaimedStateClicked: (stateAbb: string) => void
 }
 
+const getCustomStatesStyles = (claimedStates: ClaimedStates) =>  Object.fromEntries(
+    Object.entries(claimedStates).map(([key, value]) => [key, {
+        fill: claimedStateColor,
+        tooltip: {
+            enabled: true,
+            render: () =>  `${getNameFromAbb(key)} - Claimed by: ${value}`
+        },
+        onClick: () => {},
+    } as StateProps ]) 
+);
 
-const USMap: React.FC<USMapProps> = ({ claimedStates }) => {
-
+const USMap: React.FC<USMapProps> = ({ claimedStates, isLoading, unclaimedStateClicked }) => {
 
     return (
-        <div>
+        <div style={{position: 'relative'}}>
+                 {isLoading && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'not-allowed',
+          borderRadius: '4px'
+        }}>
+          {/* Replace with your preferred SVG spinner or loader text */}
+          <span style={{ fontSize: '12px', color: 'black' }}>Map Loading...</span>
+        </div>
+      )}
             <USAMap
-                customStates={ClaimedState.GetCustomStates(claimedStates)}
+                defaultState={{fill: 'green', onClick: (stateAbb) => unclaimedStateClicked(stateAbb)}}
+                customStates={getCustomStatesStyles(claimedStates)}
             />
         </div>
+       
     );
 
 }

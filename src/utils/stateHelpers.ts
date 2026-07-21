@@ -1,40 +1,32 @@
-import { STATE_NAMES, type StateAbbreviation, type StateFullName } from "./states";
-
-// 1. Create a reverse map for fast O(1) abbreviation lookups
-const REVERSE_STATE_NAMES = Object.fromEntries(
-  (Object.entries(STATE_NAMES) as [StateAbbreviation, StateFullName][]).map(
-    ([abbr, name]) => [name, abbr]
-  )
-) as Record<StateFullName, StateAbbreviation>;
-
+// utils.ts (or types.ts)
+import { ALL_STATES } from './states';
 
 /**
- * Gets the full name of a state from its 2-letter abbreviation.
- * Returns undefined if the abbreviation is not found.
+ * 1. O(1) Quick Dictionary for Name Lookups
+ * Converts the array into a static key-value map: { AL: "Alabama", AK: "Alaska" }
  */
-export function getStateNameByAbbreviation(abbr: string): StateFullName | undefined {
-  const upperAbbr = abbr.toUpperCase();
+const STATE_MAP = Object.fromEntries(
+  ALL_STATES.map((state) => [state.code, state.name])
+);
+
+/**
+ * Gets the Full State Name from an Abbreviation (e.g., "NY" -> "New York")
+ * Case-insensitive safety built-in. Returns undefined if not found.
+ */
+export const getNameFromAbb = (abb: string): string | undefined => {
+  return STATE_MAP[abb.toUpperCase()];
+};
+
+/**
+ * Gets the Abbreviation from a Full State Name (e.g., "New York" -> "NY")
+ * Strips whitespace and handles case insensitivity.
+ */
+export const getAbbFromName = (name: string): string | undefined => {
+  const normalizedSearch = name.trim().toLowerCase();
   
-  // Guard clause to ensure the string exists in our map
-  if (upperAbbr in STATE_NAMES) {
-    return STATE_NAMES[upperAbbr as StateAbbreviation];
-  }
-  return undefined;
-}
+  const foundState = ALL_STATES.find(
+    (state) => state.name.toLowerCase() === normalizedSearch
+  );
 
-
-/**
- * Gets the 2-letter abbreviation of a state from its full name.
- * Case-insensitive. Returns undefined if the name is not found.
- */
-export function getAbbreviationByStateName(name: string): StateAbbreviation | undefined {
-  // Normalize the input to match the capitalized map values (e.g., "new york" -> "New York")
-  const formattedName = name
-    .toLowerCase()
-    .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
-
-  if (formattedName in REVERSE_STATE_NAMES) {
-    return REVERSE_STATE_NAMES[formattedName as StateFullName];
-  }
-  return undefined;
-}
+  return foundState?.code; // Returns "NY" or undefined
+};
